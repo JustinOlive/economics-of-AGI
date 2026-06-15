@@ -1,0 +1,57 @@
+==============================================================================
+PART A - DETERMINISTIC REPRODUCTION OF GDOC FIGURES
+==============================================================================
+
+[2026 BASELINE]
+  Concurrent copies (20M/24)                     doc=830,000      calc=833,333        
+  Macro rev per H100 ($100B/20M)                 doc=$5,000       calc=$5,000         
+  Anthropic rev/chip ($45B/1M)                   doc=$45,000      calc=$45,000        
+  Anthropic #models (1M/24)                      doc=42,000       calc=41,667         
+  Anthropic rev/model/yr                         doc=$1.07M       calc=$1.080M        
+  Seconds per year                               doc=31.5M        calc=31.536M        
+  DeepSeek rev/GPU/yr @100%util                  doc=$230k        calc=$231.8k        
+  DeepSeek rev/GPU/yr @40%util                   doc=$90k         calc=$92.7k         
+  DeepSeek rev/model/yr (90k*24)                 doc=$2.16M       calc=$2.225M        
+
+[2031 PROJECTION]
+  H100e in 2031 (20M*3^5)                        doc=4.8B         calc=4.86B          
+  Copies 2031 (4.8B/200)                         doc=24.3M        calc=24.3M          
+    ratio vs 2026 830k                           doc=29x          calc=29.2x          
+  GPU-based rev @ $90k/chip                      doc=$180T        calc=$180.0T        
+  GPU-based rev @ $5k/chip                       doc=$10T         calc=$10.0T         
+  Model-based (10M*$200k)                        doc=$2T          calc=$2.00T         
+    NOTE: 2026 per-model case studies were $1.07M & $2.16M, NOT $200k
+          If 'same as today'=$1.07M: 10M*$1.07M = $10.8T
+  Eff tokens/sec @10%util                        doc=100B         calc=100B           
+  Tokens/min                                     doc=6T           calc=6.0T           
+    NOTE: $5M/min implies $0.83/M tokens, NOT the $3.5/M in DeepSeek calc
+  Token-based rev/yr ($5M/min)                   doc=$2.6T        calc=$2.628T        
+    If $3.5/M : $11.0T/yr | If $0.50/M: $1.58T/yr
+  Internet-equiv every                           doc=few hours    calc=1.4 hrs        
+  Human tok-equiv/min (1.5B*1000)                doc=1.5T         calc=1.50T          
+  LLM/human ratio                                doc=4x           calc=4.0x           
+    Epoch human basis 240k/day*1.5B=360T/day; LLM 8,640T/day -> 24x
+
+[TRAJECTORY] $100B->$2T implies 82%/yr CAGR; compute 243x but rev 20x -> rev/compute falls 12x
+    $100B at 3x/yr: $24.3T
+    $100B at 2x/yr: $3.2T
+    $100B at 1.7x/yr: $1.4T
+
+==============================================================================
+PART B - MONTE CARLO
+==============================================================================
+  Method1 GPU/chip   P5=  2.37 P25=  7.77 P50= 17.17 P75= 37.16 P95=107.56 ($T)
+  Method2 model      P5=  0.50 P25=  1.42 P50=  2.94 P75=  6.10 P95= 17.32 ($T)
+  Method3 token      P5=  0.50 P25=  2.16 P50=  5.92 P75= 16.25 P95= 69.08 ($T)
+  POOLED             P5=  0.63 P25=  2.40 P50=  6.51 P75= 18.26 P95= 71.99
+  P(rev>$2T)=78.9%  P(rev>$1T)=90.4%  P(rev>$10T)=39.0%
+
+[SENSITIVITY token method, Spearman rho]
+  tokens/sec capacity    rho=+0.826
+  utilisation            rho=+0.305
+  price $/Mtok           rho=+0.424
+
+[HUMAN-PARITY 2031]
+  ratio P5=0.98 P25=3.78 P50=9.65 P75=24.55 P95=93.62; P(>1)=94.9%
+
+DONE.

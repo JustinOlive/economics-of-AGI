@@ -1,0 +1,136 @@
+---
+title: "The Economics of Transformative AI: Research Synthesis & Brief Workspace"
+subtitle: "Working draft toward a two-page brief for Grant Rule / Australian government"
+author: "Justin (Arcadia Impact) with Claude"
+date: 2026-06-13
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    code-fold: true
+  pdf:
+    toc: true
+    number-sections: true
+bibliography: references.bib
+---
+
+# Purpose of this document {#sec-purpose}
+
+This is a **drafting workspace**, not the deliverable. The deliverable is a two-page brief — an executive summary for a notional 100-page report — aimed at **Grant Rule** (philanthropic backer of the e61 Institute via the Susan McKinnon Foundation), who is positioned to carry the argument to the Australian government. The audience-of-record is therefore economically literate but time-poor, and the ultimate reader is a government that has just stood up an **Australian AI Safety Institute** and a **National AI Plan** (see @sec-audience).
+
+The **core thesis** Justin wants to land: *negative outcomes from transformative AI do not require 100% automation.* Even with continued growth and only modest measured unemployment, AI can erode the political-economic feedback loops that have, for \~200 years, forced states and firms to invest in ordinary people. The mechanism is a **"resource curse" applied to intelligence**: when revenue and power stop flowing through human labour, the incentive to nurture, represent, and protect a population weakens — possibly irreversibly.
+
+The five source articles and the background research below are summarised at \~400 words each, ordered from *most* to *least* directly load-bearing for that thesis. Salience judgements (what to foreground for Grant) are flagged in **Brief relevance** notes.
+
+::: callout-note
+## How to read the confidence flags
+
+Throughout I mark claims as **\[Established\]** (mainstream economics / robust empirics), **\[Contested\]** (live debate among serious economists), or **\[Speculative\]** (plausible but model- or assumption-dependent). The brief should be ruthless about not overclaiming — a government reader will discount the whole argument if any single claim is obviously oversold.
+:::
+
+------------------------------------------------------------------------
+
+# Summaries of source articles {#sec-summaries}
+
+## The Intelligence Curse — Drago & Laine (2025) {#sec-intelligence-curse}
+
+*This is the single closest match to Justin's thesis; it is the argument, fully developed.*
+
+Drago and Laine argue that advanced AI will trigger an **"intelligence curse"** that is structurally identical to the **resource curse** afflicting petrostates. Their logic runs in three moves. **First**, "pyramid replacement": white-collar firms automate from the bottom up — first freezing entry-level hiring, then shedding junior staff, then middle management — until competitive pressure forces even the most reluctant firms to cut. They stress *competition*, not malice, as the driver; a firm that keeps humans in the loop is undercut by one that does not. **Second**, "capital, AGI and human ambition": once AI is a general substitute for labour, money buys results directly, the price of talent collapses, and the historical routes by which outsiders gained power (entrepreneurship, the hard sciences, public intellectualism) close off. The plausible endpoint is a *static* society where pre-AGI capital holdings are locked in permanently — "a more unequal, static, much richer Norway" in the good case; a permanent aristocracy in the bad case.
+
+**Third, and most important for the brief**: the resource-curse mechanism. Powerful actors care about ordinary people for two reasons — people generate taxable revenue/profit, and people can threaten power (votes, strikes, revolt). Both links are severed when revenue comes from "intelligence on tap" rather than from citizens. States then shift from income tax toward **corporate tax** (OECD average corporate tax was \~11.5% of revenue in 2022; petrostate revenue shares from resources run 30–75%), and lose the incentive to fund education, health, and infrastructure that previously *built and retained* human capital. The authors argue the intelligence curse is **stronger** than the resource curse because AI keeps improving and cannot be "run out of," and because democracy is likely a *precondition* for escaping it (autocracies with labour-replacing AI gain "infrastructural power" and need not capitulate). **\[Contested→Speculative\]** on timelines and degree; **\[Established\]** on the resource-curse analogy itself.
+
+Their proposed escape — "Avert, Diffuse, Democratize" — is the constructive half: build safety/hardening tech so catastrophes don't *force* centralization; diffuse human-augmenting (not human-replacing) AI to keep people in the value loop; and strengthen democratic institutions, including sovereign wealth funds with citizen dividends.
+
+**Brief relevance:** Borrow the resource-curse framing and the "powerful actors care about you for two reasons" device — it is the cleanest way to make Grant *feel* the incentive shift. Cite their corporate-vs-resource tax figures.
+
+## Gradual Disempowerment — Kulveit, Douglas, Ammann, Turan, Krueger & Duvenaud (2025) {#sec-gradual-disempowerment}
+
+*The academic, systems-level statement of the same risk — useful for credibility and for the "doesn't require 100% automation" point.*
+
+Kulveit et al. reframe AI existential risk away from the usual "sudden takeover" story toward **gradual disempowerment**: even incremental AI progress, with no rogue AI and no coordinated power grab, can permanently strip humans of influence over the three systems civilisation runs on — the **economy, culture, and the state**. Their pivotal insight is that these systems are currently aligned with human interests *not* by design but because they **depend on human participation** — human labour, human cognition, human consumption, human soldiers and voters. That dependence is the implicit leash. Remove it and the systems keep optimising, but for objectives increasingly **decoupled from human welfare**.
+
+The six-step argument: societal systems are roughly aligned → they stay aligned via explicit channels (voting, consumer choice) *and* implicit reliance on humans → if AI displaces that reliance, both channels weaken → AI will also pursue any *existing* misaligned incentives more aggressively → the three systems are interdependent, so misalignment in one (e.g. economic power buying political influence) compounds the others → the result is correlated, self-reinforcing drift toward human disempowerment, plausibly an existential catastrophe.
+
+For the brief, the **"Misaligned States"** section is gold. They name the rentier-state dynamic explicitly: a government funded by taxes on AI profits rather than citizen labour "will have little incentive to ensure citizens' representation." They trace it through three citizen-to-state links — **tax revenue, the security apparatus, and the legal system** — each of which AI can sever or automate, while *simultaneously* handing the state unprecedented surveillance and predictive-policing power (removing revolt as a last-resort check). They distinguish **relative disempowerment** (humans keep absolute wealth via redistribution/UBI but lose all steering control; the economy "appears to be thriving by traditional metrics") from **absolute disempowerment** (AI outbids humans for land/energy/materials and necessities become unaffordable). **\[Established\]** that labour share (\~60% of US GDP) and consumer spending (\~70%) have been stable for a century — the Kaldor stylised facts they anchor on; **\[Speculative\]** on the extinction-level endpoint.
+
+Crucially, they are candid that **no one has a workable plan** to stop it, and that aligning individual AI systems is *insufficient*. Mitigations are gestured at: measure "AI share of GDP" as a distinct category, progressively tax AI-generated revenue, build human "AI delegates," and pursue "ecosystem alignment."
+
+**Brief relevance:** Use this as the peer-reviewed-adjacent backstop and the source of the "thriving by traditional metrics while humans lose control" line — it pre-empts the "but GDP is fine" rebuttal.
+
+## Scenarios for the Transition to AGI — Korinek & Suh (2024) {#sec-scenarios}
+
+*The formal wage model. This is what lets the brief say "even mainstream growth theory predicts wage collapse" — and Korinek is the through-line author across three of the five papers.*
+
+Korinek and Suh build a task-based growth model (in the Zeira / Acemoglu–Restrepo tradition) to answer a single question: as automation advances, do wages rise or collapse? Human work decomposes into atomistic **tasks of varying complexity**; an exogenously rising **automation index** (think Moore's Law / compute) makes ever-more-complex tasks machine-doable. Automated tasks can be done by labour *or* capital; unautomated tasks still need humans. The fate of wages turns on a **race between automation and capital accumulation**, and on the *shape of the task distribution*.
+
+Two headline results. **(1)** If the complexity of human tasks is **unbounded with a sufficiently thick tail**, there is always enough un-automatable work and wages can rise forever. If the tail is **thin, or bounded** (the brain is finite, so full automation is reached in finite time), **wages collapse**. **(2)** — and this is the part the brief needs — wages can fall **well before full automation**. There is a threshold of the automation index beyond which labour stops being scarce relative to capital; past it, labour and capital become *perfect substitutes at the margin* and the wage falls to the marginal product of capital (the economy behaves like an "AK" model). The effect of automation on wages is therefore **hump-shaped**: rising while automation raises productivity and labour is still scarce, then falling as displacement dominates.
+
+Their simulations (Figure 8) make it vivid. In **business-as-usual** (Pareto tasks, exponential automation) output and wages both rise for a century. In the **baseline AGI** (full automation in 20 years) and **aggressive AGI** (5 years) scenarios, output grows \~10× faster — *but the wage bill, after an initial rise, collapses* as the unautomated-task fraction goes to zero. A fourth **mixed** scenario (a near-term burst of cognitive automation, then a long tail) shows wages dip and partially recover. Two amplifiers: **irreproducible scarce factors** (land, energy) can capture an ever-larger output share and deepen the wage decline (a Malthusian echo); whereas automating *productivity growth itself* can lift returns to all factors. **\[Established\]** as internally rigorous theory; **\[Contested\]** on which task-distribution assumption is empirically right — that is the crux on which optimists and pessimists divide.
+
+**Brief relevance:** This is the citation behind "wages can collapse even with booming output, and even before full automation." The hump-shaped wage path is the single most useful chart to adapt. Note for Grant: this is *standard* growth economics, not doomerism.
+
+## Measuring the AI Economy — Korinek & McKelvey (2026) {#sec-measuring}
+
+*The empirical anchor — fresh (May 2026), quantitative, and it lets the brief talk about the tax base in concrete numbers.*
+
+This PIIE working paper tackles a measurement problem: AI's footprint is nearly invisible in headline GDP, yet may be growing explosively. Korinek and McKelvey construct a production-side estimate of US AI output from raw compute capacity (anchored in data-centre electricity use and chip data), map it to nominal spending via GPU rental prices, and apply **quality adjustments** — using API prices at fixed performance for inference, and algorithmic-progress estimates for training. The results are arresting: **nominal** AI compute spending grew \~144%/yr in 2024 and 2025; physical compute \~213%/yr; but **quality-adjusted** AI output grew **\>2,000%/yr** and quality-adjusted "AI GDP" **\>2,500%/yr**. The gap is the story: a quality-adjusted inference deflator falling \~94%/yr means users get \~16× more capability per dollar each year, so real output explodes while nominal revenue grows only moderately.
+
+They then propose an **"AI GDP"** framework: treat the AI sector as a separate "island" that imports electricity, chips, and labour from the human economy and exports inference. On rough, assumption-heavy figures, nominal AI GDP reached **\~\$250B in 2025** (comparable to US passenger-airline revenue), with real AI GDP growing \~2,600%/yr. The authors are scrupulous about caveats: the benchmark-to-economic-value link is uncertain; the training/inference compute split is largely unobserved; margins are opaque.
+
+The conceptually decisive point for the brief: prior mismeasurement episodes (semiconductors, the internet) stayed *bounded* because the technology was a **complement** to human labour — gains had to flow through a "human bottleneck." AI is the first candidate for large-scale mismeasurement where the fast-growing sector is a **substitute for labour itself**. So the historical reassurance ("we've worried about GDP missing tech before and it was fine") **does not carry over**. As AI becomes broadly substitutable, the relevant price comparison shifts from *AI-vs-older-AI* to **AI-vs-human-wages**, at which point AI's deflator may stop falling and capacity growth could hit GDP abruptly — a regime change central banks and treasuries have no instruments to see coming.
+
+Their explicit **policy section** is tailor-made for Grant: income and payroll taxes are the backbone of advanced-economy revenue, and "the central fiscal question raised by AI is how quickly the wage tax base will erode and what will replace it." A finance ministry running ten-year projections on conventional data will *underweight* the labour-tax-base shock and be unready for responses like sovereign wealth funds or compute dividends. **\[Established\]** direction (rapid, under-measured growth); **\[Contested\]** magnitudes (quality adjustment is aggressive, as the authors concede).
+
+**Brief relevance:** Source of hard numbers and the killer framing "a windfall that cannot be seen cannot be shared." Ties Justin's tax-base argument to live fiscal-policy practice.
+
+## A Research Agenda for the Economics of TAI — Brynjolfsson, Korinek & Agrawal (2025) {#sec-agenda}
+
+*Lower load-bearing, but it legitimises the whole enterprise: three of the most cited names in the field saying these questions are urgent and open.*
+
+This NBER agenda defines **Transformative AI** economically — AI that sustains **total factor productivity growth 3–5× historical averages** — and lays out **nine "Grand Challenges"**: economic growth, innovation, income distribution, **concentration of decision-making and power**, geoeconomics, information flows, AI safety & alignment, meaning & well-being, and transition dynamics. For Justin's purposes the value is twofold: it shows the field's most authoritative voices treat his concerns as central and unresolved, and it supplies precise, citable question-framings and a measurement vocabulary.
+
+Several challenges map directly onto the brief. On **income distribution**, they state the core mechanism plainly: "if a machine is a close substitute for a worker in a job, the worker's market wage will tend to fall to the cost of having a machine do the same tasks," and they ask whether existing **social safety nets — built on the assumption that labour is the main income source — can survive a TAI world**. On **concentration of power**, they flag that economic concentration "often leads to concentration of political power," that capital owners (more concentrated than labour) may gain, and that delegating economic decisions to AI raises questions of human agency and autonomy. On **geoeconomics**, they raise differential national adoption, regulatory arbitrage, "digital sovereignty," and even taxation of **digital tokens** — directly relevant to Justin's "tax tokens / race to the bottom" worry.
+
+Methodologically they call for a **"Transformative AI dashboard"** and **new welfare metrics** (because zero-priced AI goods get \~zero weight in GDP), and they endorse **scenario planning** over point forecasts given deep uncertainty — useful cover for a brief that argues from scenarios rather than predictions. They note the live dissent: Acemoglu argues AI will automate only a limited task share with modest growth effects, and Narayanan & Kapoor frame AI as "normal technology." The authors' response is essentially a **precautionary / option-value** argument: even if transformation is unlikely, the stakes justify preparing now — "organizations and processes evolve far more slowly than technology itself, which makes our work all the more urgent." **\[Established\]** as a credible research-community consensus that the questions matter; deliberately agnostic on answers.
+
+**Brief relevance:** Use sparingly — one or two sentences to establish that serious, mainstream economists (Brynjolfsson, Korinek, Agrawal; and via lineage, Stiglitz) take this seriously. Also the home of the safety-net-obsolescence question and the explicit dashboard/scenario-planning recommendations, which can seed the brief's "what to do" section.
+
+------------------------------------------------------------------------
+
+# Background research: the audience {#sec-audience}
+
+## Andrew Charlton — economic worldview {#sec-charlton}
+
+Charlton matters because he is the intellectual centre of gravity here: he **co-founded the e61 Institute** (with Prof. Greg Kaplan, 2021; he has since stepped off the board for non-partisanship), and as **Assistant Minister for Science, Technology and the Digital Economy and Cabinet Secretary** (sworn in 13 May 2025) he is the minister behind the **Australian AI Safety Institute**. Note the correction to the working assumption: Charlton *founded* e61; Grant Rule is a philanthropic backer (see @sec-rule), so it is Charlton — not Rule — who co-founded it.
+
+His economics is **centrist, evidence-based, data-driven**, with genuine academic weight: Oxford PhD (Rhodes Scholar), stints at the LSE, OECD, RBA and UN, and — most usefully for us — **co-author with Joseph Stiglitz** of *Fair Trade for All* (OUP, 2005). That Stiglitz link is a gift: the Korinek papers descend intellectually from **Korinek & Stiglitz (2019)** on AI, income distribution and "worker-replacing technological change." Charlton was **chief economic adviser to PM Kevin Rudd (2007–2010)**, i.e. he ran economic advice *through the Global Financial Crisis* — he thinks in terms of systemic risk, market failure, and state intervention to stabilise, not laissez-faire. *Ozonomics* (2007) argued that workers' rights, immigration, and investment in **technology and education** all matter for national prosperity; his Quarterly Essays (*Man-Made World*, 2011; *Dragon's Tail*, 2014) show comfort with long-horizon, structural, political-economy argument.
+
+**Implications for framing the brief:** (1) He will respond to **rigorous, distributional, market-failure** arguments, not to alarmism — pitch the thesis as an *externality / incentive-misalignment* problem, which is exactly the register of Korinek–Stiglitz. (2) He has **publicly committed** to a "balance innovation and protection" posture (the National AI Plan's three goals; Australia notably *dropped* proposed mandatory AI rules), and he has political ambition — he wants forward-thinking, statesmanlike ideas he can own. The brief should give him a *distinctively new* lens (the political-economic balance / intelligence curse) that is compatible with his pro-innovation stance, not a brake on it. (3) The human-capital-investment logic in *Ozonomics* is precisely what the intelligence curse predicts will erode — a direct, personalised hook.
+
+## Grant Rule — the principal {#sec-rule}
+
+Grant Rule is a **tech entrepreneur turned philanthropist**: he founded the SMS company **MessageMedia** (sold to Sinch for **US\$1.3B in 2021**), and with his spouse Sophie Oh co-founded the **Susan McKinnon Foundation**, a non-partisan philanthropy focused on **improving democratic institutions and government effectiveness** — it funds e61, the McKinnon Institute for Political Leadership, and the McKinnon Prize in Political Leadership.
+
+**Implications:** Rule's revealed priority is **the health of democratic institutions and the quality of government** — which is *exactly* the terrain of the gradual-disempowerment / intelligence-curse thesis (the risk is fundamentally to the political-economic settlement, not just to jobs). Frame the brief's stakes in **institutional** terms: AI's deepest threat is to the feedback loops that keep government answerable to citizens. As a founder he will also intuitively grasp the **personal case study** in Justin's notes (choosing to scale via AI agents rather than hire) and the competitive-pressure logic of pyramid replacement. He is a *translator* to government, so the brief must be self-contained, jargon-light, and give him crisp, repeatable lines.
+
+::: callout-tip
+## Verified facts that *strengthen* the brief (checked 2026-06-13)
+
+-   **Anthropic CEO Dario Amodei did meet PM Albanese** (Canberra), signing an MOU backing Australia's national AI strategy with data-centre / medical-research commitments. Justin's anecdote is **confirmed** — safe to use as the "AI-CEO-as-head-of-state" illustration.
+-   **Australia is unusually dependent on income taxation**: income-based taxes are \~**77.9%** of federal tax revenue (10-yr avg \~75.6%), and Australia relies on individual + corporate income tax far more than most developed economies. This is a *materially stronger* version of the GDoc's "majority of revenue is income tax" premise — it makes the wage-tax-base-erosion argument hit harder for Australia specifically. **Localise the brief around this number.**
+-   AI Safety Institute commitment \~**A\$29.9M** (early 2026), within the National AI Plan's three goals (capture opportunities / spread benefits / keep Australians safe); note Australia *dropped* proposed mandatory AI rules — confirm exact figures against primary government releases at draft-final stage.
+:::
+
+------------------------------------------------------------------------
+
+# Next steps (parked, per Justin) {#sec-next}
+
+Not started yet — listed so we don't lose them:
+
+1.  **Economic-theory tutoring** so the brief uses correct terms (factor shares, elasticity of substitution, rents vs. taxes, marginal product of capital, Baumol effects, fiscal incidence). See @sec-scenarios for the core model vocabulary.
+2.  **Empirical backstops** for the brief's claims — e.g. Australia's income-tax share of revenue; labour share trends; data-centre / energy build-out in Australia; corporate tax mobility evidence.
+3.  **Distil to the two-pager** — candidate spine: (i) the 200-year anomaly \[why life got good\], (ii) the hidden mechanism \[human dependence = the leash\],
+    (iii) the intelligence curse \[the leash slips\], (iv) why "GDP is fine" is no comfort, (v) what Australia can do now \[measure AI GDP, scenario-plan, pre-commit to benefit-sharing institutions\].

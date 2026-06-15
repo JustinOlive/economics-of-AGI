@@ -1,0 +1,14 @@
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Office / LibreOffice temp lock files (created while a file is open)
+.~lock.*#
+~$*
+
+# Scratch / temp outputs
+_tmp_*

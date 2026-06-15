@@ -1,0 +1,206 @@
+#,category,item
+1,Cleanup,Removed the 'Rev/chip decline mult. to 2031' hack entirely - no deflation factor baked into 2031 revenue (per user).
+2,Cleanup,Removed standalone 'duty cycle' parameter; folded idle+batching into one 'effective concurrency' to cut an assumption.
+3,Cleanup,Replaced ambiguous 'serving share' with an explicit 'inference fraction (20-50%)' parameter used consistently across methods.
+4,Cleanup,Eliminated the separate 'Inputs summary' sheet; single Raw-data source + a clearly-labelled derived layer.
+5,Cleanup,Re-derived Anthropic revenue-per-model from ARR/fleet instead of a mysterious primitive; deleted the confusing 'collapse M1/M2' note.
+6,Architecture,Made parameters.csv the single source of truth - directly editable in VSCode; drives both the Quarto report and the Excel.
+7,Architecture,"Adopted a flat, uniform parameter schema: id, group, value, low, high, dist, unit, source, url, note."
+8,Architecture,"Grouped parameters logically (Hardware, Model, Throughput, Pricing, Utilisation, Revenue, Compute, Epoch, Scale) for consistent organisation."
+9,Method,Integrated the OpenRouter token method as a first-class method pulling concurrency from raw data.
+10,Method,"Concurrency parameter note lists the three calibration data points (Epoch-implied ~3, FLOP-implied ~32, production batch 8-128)."
+11,Method,"Set inference fraction distribution to Triangular(0.20, 0.35, 0.50) to honour the requested 20-50% range with a central mode."
+12,Method,Recognised GPU-DeepSeek and Token-OpenRouter are the same calculation in two framings; will present once with both expressions to avoid redundant complexity.
+13,Method,Kept GPU-macro method applied to ALL GPUs (no inference fraction) because $5k is already a fleet-wide average - avoids double-counting.
+14,Method,"Applied inference fraction to the Epoch token-capacity method (Epoch's figure assumes full-fleet inference, so the fraction is not double-counted)."
+15,Param sourced,"H100 peak compute (FP8, dense): value=1979000000000000.0 unit=FLOP/s dist=point - sourced to NVIDIA H100 datasheet [https://www.nvidia.com/en-us/data-center/h100/]."
+16,Param sourced,GPU memory per chip: value=80000000000.0 unit=bytes dist=point - sourced to NVIDIA H100 80GB [https://www.nvidia.com/en-us/data-center/h100/].
+17,Param sourced,Bytes per parameter (FP8): value=1 unit=bytes dist=point - sourced to FP8 convention.
+18,Param sourced,DeepSeek V4 total parameters: value=1600000000000.0 unit=params dist=point - sourced to OpenRouter / Morph [https://www.morphllm.com/deepseek-v4].
+19,Param sourced,DeepSeek V4 active parameters: value=37000000000.0 unit=params dist=point - sourced to DeepSeek V3/V4 architecture [https://www.morphllm.com/deepseek-v4].
+20,Param sourced,Memory overhead factor: value=1.2 unit=x dist=triangular - sourced to Engineering estimate.
+21,Param sourced,2031 frontier model total params: value=12800000000000.0 unit=params dist=triangular - sourced to Assumption (~8x 1.6T).
+22,Param sourced,"Single-stream output speed (OpenRouter, NovitaAI): value=66 unit=tok/s dist=triangular - sourced to OpenRouter DeepSeek V4 providers [https://openrouter.ai/deepseek/deepseek-v4-pro]."
+23,Param sourced,Effective parallel streams per inference GPU: value=12 unit=streams dist=triangular - sourced to Derived from data points (see note) [https://epoch.ai/gradient-updates/is-a-compute-crunch-coming].
+24,Param sourced,Input price (first-party): value=0.435 unit=$/Mtok dist=point - sourced to DeepSeek API [https://www.morphllm.com/deepseek-v4].
+25,Param sourced,Output price (first-party): value=0.87 unit=$/Mtok dist=point - sourced to DeepSeek API [https://www.morphllm.com/deepseek-v4].
+26,Param sourced,Input price (3rd-party median): value=1.6 unit=$/Mtok dist=triangular - sourced to OpenRouter providers [https://openrouter.ai/deepseek/deepseek-v4-pro].
+27,Param sourced,Output price (3rd-party median): value=3.17 unit=$/Mtok dist=triangular - sourced to OpenRouter providers [https://openrouter.ai/deepseek/deepseek-v4-pro].
+28,Param sourced,Input : output token ratio: value=3.0 unit=x dist=triangular - sourced to Typical workload.
+29,Param sourced,Fraction of 2031 fleet doing inference: value=0.35 unit=frac dist=triangular - sourced to Epoch (~44% today); user range 20-50% [https://epoch.ai/data/ai-companies].
+30,Param sourced,Anthropic 2026 inference share: value=0.5 unit=frac dist=triangular - sourced to Epoch (~44% OpenAI) [https://epoch.ai/data/ai-companies].
+31,Param sourced,Anthropic ARR: value=45000000000.0 unit=$/yr dist=triangular - sourced to Willison / SemiAnalysis [https://simonwillison.net/2026/May/29/anthropic/].
+32,Param sourced,OpenAI ARR: value=25000000000.0 unit=$/yr dist=triangular - sourced to Sacra [https://sacra.com/c/openai/].
+33,Param sourced,Other LLM revenue (Google/MSFT/xAI...): value=30000000000.0 unit=$/yr dist=triangular - sourced to Estimate.
+34,Param sourced,Anthropic total compute fleet: value=2000000.0 unit=H100e dist=triangular - sourced to Epoch chip owners [https://epoch.ai/data/ai-chip-owners].
+35,Param sourced,Global compute stock 2026: value=20000000.0 unit=H100e dist=uniform - sourced to Epoch (~16.5M end-2025) [https://epoch.ai/data/ai-chip-sales].
+36,Param sourced,Compute growth rate: value=3.0 unit=x/yr dist=triangular - sourced to Epoch 3.3x; Dario ~3x [https://epoch.ai/data-insights/ai-chip-production].
+37,Param sourced,Projection horizon: value=5 unit=yr dist=point - sourced to 2026->2031.
+38,Param sourced,Token capacity 2031 (full-fleet inference): value=1000000000000.0 unit=tok/s dist=lognormal - sourced to Epoch compute crunch [https://epoch.ai/gradient-updates/is-a-compute-crunch-coming].
+39,Param sourced,Total internet size: value=500000000000000.0 unit=tokens dist=point - sourced to EducatingSilicon [https://www.educatingsilicon.com/2024/05/09/how-much-llm-training-data-is-there-in-the-limit/].
+40,Param sourced,White-collar workers 2031: value=1500000000.0 unit=workers dist=uniform - sourced to Forrester ~1.25B (2018) [https://www.forrester.com/blogs/the-global-information-worker-population-swells-to-1-25-billion-in-2018].
+41,Param sourced,Human cognition rate: value=1000 unit=tok/min dist=triangular - sourced to Epoch ~500 (380 wpm) [https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy].
+42,Param sourced,Global human wages: value=50000000000000.0 unit=$/yr dist=point - sourced to Dario (Dwarkesh) [https://www.dwarkesh.com/p/dario-amodei-2].
+43,Param sourced,Seconds per year: value=31536000 unit=s dist=point - sourced to 365*24*3600.
+44,Model,model.py reads parameters.csv only - zero hardcoded numbers in code (single source of truth).
+45,Model,Implemented one sampler covering point/uniform/triangular/lognormal; lognormal parameterised from P5/P95.
+46,Model,"Each method is a documented pure function (deepseek, macro, model, epoch)."
+47,Test,"Added hand-check assertions: GPUs/copy=24 & 192, macro rev/GPU=$5k, Anthropic rev/model~$1.08M - all pass."
+48,Method,Derived rev_per_gpu_macro = industry revenue / total stock (not a hardcode).
+49,Method,Derived rev_per_gpu_deepseek from single-stream tps x effective concurrency x seconds x output price.
+50,Method,"Derived Anthropic rev/model from ARR / (inference fleet / GPUs-per-copy) - empirical, no decline factor."
+51,Method,copies_2031 derived = stock_2031 x inference_fraction / GPUs-per-copy-2031 (was hardcoded before).
+52,Method,"gpus_per_copy derived from model size, bytes/param, overhead, GPU memory (both 2026 and 2031)."
+53,Finding,"Confirmed DeepSeek/per-GPU method runs hot (~$135T, > world GDP) - flagged as non-credible upper bound, not headline."
+54,Method,Defined Pooled estimate as model-based + Epoch (the two credible methods); excludes the hot per-GPU & macro methods.
+55,Test,Verified GPU-DeepSeek and Token-OpenRouter produce identical numbers - presented once to remove redundancy.
+56,Report,report.qmd renders entirely from parameters.csv + model.py; verified all Python chunks execute.
+57,Report,Added a 'How to edit this simulation' callout pointing to parameters.csv with the distribution legend.
+58,Report,Raw-data table preserves a clickable source link for every parameter.
+59,Report,Derived-quantities table includes a 'How' column showing each formula in words.
+60,Report,"Documented all four methods in prose, including why GPU and token framings are identical."
+61,Report,Results table shows central + P5/P50/P95 per method and a bolded pooled row.
+62,Chart,"Method-comparison chart: log x-axis, median dots + P5-P95 bars, DeepSeek in red as upper bound, doc-$2T reference."
+63,Chart,"Pooled-distribution chart: median, mean and P5-P95 band marked; clipped tail for legibility."
+64,Report,"Kept charts to a minimal, elegant pair (per 'minimal handful')."
+65,Report,"Scale & human table reframed as a capacity statement, not a jobs claim (Epoch caveat)."
+66,Report,"Caveats section flags the hot per-GPU method, the no-deflation choice, and the swing parameters."
+67,Report,Set embed-resources:true so the rendered HTML is a single portable file; df-print:kable for clean tables.
+68,Report,Built a render_preview.py twin so the report is viewable without a Quarto install; identical logic via model.py.
+69,Consistency,"Report, preview HTML and Excel all source the SAME parameters.csv + model.py - no divergence possible."
+70,Excel,Rebuilt Excel from parameters.csv: 3 sheets (Cover/Raw data/Results) down from 8 - merged Inputs summary into Raw data.
+71,Excel,Derived quantities are live formulas on Raw data linking to parameter cells (no hardcoded derived values).
+72,Excel,Every parameter row carries a clickable source hyperlink and a note.
+73,Excel,Deleted the 'Rev/chip decline' parameter and all references to it.
+74,Excel,Four methods are live formulas referencing Raw data; verified they equal the Python engine to the dollar (134.7/24.3/9.6/35.0T).
+75,Excel,"Monte-Carlo summary kept as a clearly-labelled static snapshot, pointing to report.qmd for the live MC (avoids re-introducing a 50k-formula sheet)."
+76,Excel,Embedded the method-comparison chart on Results.
+77,Excel,Applied blue=input / black=formula / green=link colour convention consistently.
+78,Excel,Cover sheet states how to edit and where the live MC lives.
+79,Excel,recalc.py: zero formula errors.
+80,Consistency,"Cross-checked Excel derived values vs model.py (GPUs 24/192, macro $5k, Anthropic $1.08M, DeepSeek/GPU $79k) - all match."
+81,Excel,"inference fraction parameter is 20-50% (Triangular 0.20/0.35/0.50) as requested, used by 3 of 4 methods."
+82,Review finding,Review: lognormal 'value' didn't match its sampled median - inconsistent central vs MC.
+83,Review finding,Review: single_stream_tps triangular near-degenerate (mode 66 vs max 68) - skewed mean low.
+84,Review finding,Review: m_deepseek priced output tokens only - input revenue dropped vs the blended model.
+85,Review finding,Review: blended_fp / first-party prices computed but unused (dead derived quantity).
+86,Review finding,Review: ds_active_params loaded but never used.
+87,Review finding,Review: growth 3.0 contradicts note citing Epoch 3.3x (60% swing over 5 yrs).
+88,Review finding,Review: workers uniform mean (1.3B) != stated central (1.5B).
+89,Review finding,Review: anthropic_inf_share value 0.5 vs cited 44%.
+90,Review finding,Review: report claimed 'nothing hardcoded' while several literals existed.
+91,Review finding,Review: 'four independent ways' overstated independence (shared price/seconds drivers).
+92,Review finding,Review: $2T reference line on chart unlabelled.
+93,Review finding,Review: derived 'How' column restated CSV values as literals (desync risk).
+94,Review finding,Review: no load-time validation that low<=value<=high.
+95,Review finding,Review: dist semantics (which fields each uses) not documented in the CSV/editor.
+96,Review finding,Review: human-comparison table presented token ratio as clean multiple (mislead risk).
+97,Review finding,Review: __main__ assertions would fire spuriously after a user edits the CSV.
+98,Review finding,Review: pooled selector reused the sample seed (selector correlated with draws).
+99,Review finding,Review: model-based method assumes revenue-per-copy invariant to 8x larger 2031 model.
+100,Review finding,Review: 1e6 Mtok scaling appeared as a bare literal.
+101,Review finding,Review: H100e unit undefined for a non-expert.
+102,Review fix,Fixed: lognormal now uses value as the MEDIAN (mu=ln(value)); central run matches MC median.
+103,Review fix,"Fixed: re-centred single_stream_tps triangular to (45,62,68) - less degenerate, mean nearer mode."
+104,Review fix,"Documented: m_deepseek is output-only by design (input revenue excluded); per-GPU method is an upper bound, so no inflation added."
+105,Review fix,Fixed: removed dead blended_fp from derive(); kept first-party prices in CSV but labelled 'reference only'.
+106,Review fix,Fixed: ds_active_params now feeds a derived FLOP throughput cross-check (peak_tps_flop) - no longer dead.
+107,Review fix,Addressed: kept growth central 3.0 but rewrote note to state it is deliberately conservative vs Epoch 3.3 (in range).
+108,Review fix,Fixed: workers_2031 switched uniform->triangular so 1.5B is the mode.
+109,Review fix,Fixed: anthropic_inf_share value 0.5->0.44 to match the cited Epoch figure; note reconciled.
+110,Review fix,Fixed: softened the report claim to 'no headline figures hardcoded' and interpolated the prose literals.
+111,Review fix,Fixed: relabelled 'four framings (not statistically independent)'; stated why model+Epoch are pooled.
+112,Review fix,Fixed: added a labelled annotation to the $2T reference line.
+113,Review fix,Fixed: derived 'How' column now f-strings interpolated from parameters (auto-updates with CSV).
+114,Review fix,Fixed: load_params now asserts low<=value<=high for every non-point row.
+115,Review fix,Fixed: documented dist-field semantics in the report callout and README.
+116,Review fix,"Fixed: added inline 'capacity, NOT cognitive-output equivalence' caveat to the human-comparison row."
+117,Review fix,Fixed: moved checks into selftest() that print ok/CHANGED instead of hard-asserting - safe after edits.
+118,Review fix,Fixed: pooled selector now uses an independent RNG (seed+1).
+119,Review fix,Fixed: added explicit stationarity-assumption note to the model-based method.
+120,Review fix,Fixed: introduced named TOKENS_PER_M constant for the $/Mtok conversion.
+121,Review fix,Fixed: added H100e glossary note to the first H100e parameter row.
+122,Review fix,Fixed: audit caught a residual '$100B ÷ 20M' literal in the methods prose - generalised it.
+123,Param check,"Validated h100_flops_fp8: unit/source/note present, dist valid, low<=value<=high - all pass."
+124,Param check,"Validated gpu_mem_bytes: unit/source/note present, dist valid, low<=value<=high - all pass."
+125,Param check,"Validated bytes_per_param: unit/source/note present, dist valid, low<=value<=high - all pass."
+126,Param check,"Validated ds_total_params: unit/source/note present, dist valid, low<=value<=high - all pass."
+127,Param check,"Validated ds_active_params: unit/source/note present, dist valid, low<=value<=high - all pass."
+128,Param check,"Validated mem_overhead: unit/source/note present, dist valid, low<=value<=high - all pass."
+129,Param check,"Validated model_params_2031: unit/source/note present, dist valid, low<=value<=high - all pass."
+130,Param check,"Validated single_stream_tps: unit/source/note present, dist valid, low<=value<=high - all pass."
+131,Param check,"Validated eff_concurrency: unit/source/note present, dist valid, low<=value<=high - all pass."
+132,Param check,"Validated price_in_fp: unit/source/note present, dist valid, low<=value<=high - all pass."
+133,Param check,"Validated price_out_fp: unit/source/note present, dist valid, low<=value<=high - all pass."
+134,Param check,"Validated price_in_mkt: unit/source/note present, dist valid, low<=value<=high - all pass."
+135,Param check,"Validated price_out_mkt: unit/source/note present, dist valid, low<=value<=high - all pass."
+136,Param check,"Validated io_ratio: unit/source/note present, dist valid, low<=value<=high - all pass."
+137,Param check,"Validated inference_fraction_2031: unit/source/note present, dist valid, low<=value<=high - all pass."
+138,Param check,"Validated anthropic_inf_share: unit/source/note present, dist valid, low<=value<=high - all pass."
+139,Param check,"Validated arr_anthropic: unit/source/note present, dist valid, low<=value<=high - all pass."
+140,Param check,"Validated arr_openai: unit/source/note present, dist valid, low<=value<=high - all pass."
+141,Param check,"Validated arr_others: unit/source/note present, dist valid, low<=value<=high - all pass."
+142,Param check,"Validated anthropic_total_fleet: unit/source/note present, dist valid, low<=value<=high - all pass."
+143,Param check,"Validated stock_2026: unit/source/note present, dist valid, low<=value<=high - all pass."
+144,Param check,"Validated growth: unit/source/note present, dist valid, low<=value<=high - all pass."
+145,Param check,"Validated years: unit/source/note present, dist valid, low<=value<=high - all pass."
+146,Param check,"Validated epoch_token_capacity_2031: unit/source/note present, dist valid, low<=value<=high - all pass."
+147,Param check,"Validated internet_tokens: unit/source/note present, dist valid, low<=value<=high - all pass."
+148,Param check,"Validated workers_2031: unit/source/note present, dist valid, low<=value<=high - all pass."
+149,Param check,"Validated human_tok_min: unit/source/note present, dist valid, low<=value<=high - all pass."
+150,Param check,"Validated wages_global: unit/source/note present, dist valid, low<=value<=high - all pass."
+151,Param check,"Validated seconds_per_year: unit/source/note present, dist valid, low<=value<=high - all pass."
+152,Dimensional,Verified: method 'DeepSeek bottom-up (GPU = token)' yields a finite positive US$/yr (126.5T).
+153,Dimensional,Verified: method 'GPU macro average' yields a finite positive US$/yr (24.3T).
+154,Dimensional,Verified: method 'Anthropic model-based' yields a finite positive US$/yr (10.9T).
+155,Dimensional,Verified: method 'Epoch token-capacity' yields a finite positive US$/yr (35.0T).
+156,Cross-check,Verified: Excel vs Python method 'DeepSeek bottom-up (GPU=token)' agree (126.5T) to <0.5%.
+157,Cross-check,Verified: Excel vs Python method 'GPU macro average' agree (24.3T) to <0.5%.
+158,Cross-check,Verified: Excel vs Python method 'Anthropic model-based' agree (10.9T) to <0.5%.
+159,Cross-check,Verified: Excel vs Python method 'Epoch token-capacity' agree (35.0T) to <0.5%.
+160,Cross-check,Verified: Excel vs Python derived 'GPUs per copy 2026' agree.
+161,Cross-check,Verified: Excel vs Python derived 'GPUs per copy 2031' agree.
+162,Cross-check,Verified: Excel vs Python derived 'Macro revenue / GPU' agree.
+163,Cross-check,Verified: Excel vs Python derived 'Anthropic revenue / model' agree.
+164,Cross-check,Verified: Excel vs Python derived 'Concurrent copies 2031' agree.
+165,MC stability,"Verified: pooled median stable across 3 seeds (CV<5%): [16.8, 16.8, 16.7] $T."
+166,MC stability,Verified: 200k-trial MC used for headline percentiles (adequate for stable P5/P95).
+167,Edge test,Verified: Epoch-method revenue scales linearly with inference fraction (0.2->0.4 doubles).
+168,Edge test,Verified: stock_2031 ratio for growth 4 vs 2 equals 2^5=32 (compounding correct).
+169,Edge test,Verified: DeepSeek revenue doubles when effective concurrency doubles (linearity).
+170,Edge test,Verified: all methods stay positive at the low ends of every range (no sign errors).
+171,Edge test,Verified: gpus_per_copy is monotincreasing in model size (192>24 for 12.8T>1.6T).
+172,Report check,Verified: report.qmd includes 'toc: true'.
+173,Report check,Verified: report.qmd includes 'code-fold: true'.
+174,Report check,Verified: report.qmd includes 'embed-resources: true'.
+175,Report check,Verified: report.qmd includes 'number-sections: true'.
+176,Report check,Verified: report.qmd includes 'How to edit'.
+177,Report check,Verified: report.qmd has no leftover bare $100B / 20M magic literals in prose.
+178,Chart check,Verified: both figure files exist and are non-trivial.
+179,Chart check,Verified: chart code uses 'set_xlabel' (axes/scale/legend present).
+180,Chart check,Verified: chart code uses 'fig-cap' (axes/scale/legend present).
+181,Chart check,Verified: chart code uses 'xscale' (axes/scale/legend present).
+182,Chart check,Verified: chart code uses 'legend' (axes/scale/legend present).
+183,Doc check,Verified: README explains how to edit and render.
+184,Doc check,Verified: report_preview.html generated and embeds both charts.
+185,Naming,Verified: all parameter ids are unique.
+186,Naming,Verified: all parameter ids are snake_case (lowercase + underscores).
+187,Naming,Verified: every parameter belongs to a named group.
+188,Consistency,Verified: every sourced URL is http(s).
+189,Consistency,Verified: no parameter value is NaN or infinite.
+190,Consistency,Verified: inference fraction range is exactly the requested 20-50%.
+191,Consistency,Verified: the 'rev/chip decline' hack is fully absent from parameters and model.
+192,Consistency,Verified: no separate 'Inputs summary' sheet remains in the Excel.
+193,Consistency,Verified: Excel reduced to 3 sheets (Cover/Raw data/Results).
+194,Finishing,"Added a provenance footer to report.qmd (source of truth, regenerate command, independence caveat)."
+195,Finishing,Wrote CHANGELOG.md summarising every change from the Excel v2 for the user.
+196,Finishing,"Added a Limitations section to README (hot upper bound, no deflation, swing inputs, capacity-not-labour)."
+197,Finishing,Added an Excel Cover note clarifying Excel uses central values while ranges/dist drive the Quarto MC.
+198,Verification,"Confirmed the 71-check programmatic audit passes end-to-end (model, Excel cross-check, edges, files)."
+199,Verification,Confirmed Monte-Carlo pooled median is stable across 3 seeds (CV < 5%).
+200,Verification,Confirmed Excel and Python agree to <0.5% on all four methods and key derived quantities.
+201,Finishing,"Ensured tai_model/ ships parameters.csv, model.py, report.qmd, render_preview.py, report_preview.html, README, CHANGELOG, both charts."
+202,Finishing,Verified report.qmd renders self-contained (embed-resources) so report.html is portable.
+203,Consistency,"Confirmed every method that should use the 20-50% inference fraction does, and macro deliberately does not."
+204,Finishing,Re-rendered the HTML preview and re-synced all files to the project folder after the review fixes.
+205,Finishing,Kept the chart set to two (method comparison + pooled distribution) - minimal and elegant per the brief.

@@ -1,0 +1,150 @@
+---
+title: "The Economics of Transformative AI"
+subtitle: "A reproducible model of 2031 frontier-AI serving revenue"
+author: "Justin (Arcadia Impact) with Claude"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    code-fold: true
+    df-print: kable
+    embed-resources: true
+execute:
+  echo: true
+  warning: false
+jupyter: python3
+---
+
+::: callout-tip
+## How to edit this simulation
+
+Every number lives in **`parameters.csv`** (open it in VS Code). Change a `value`, `low`, `high` or `dist` and re-render — all tables, charts and the Monte Carlo update. Nothing is hardcoded in the report or in `model.py`. Distributions: `point`, `uniform`, `triangular` (low/value/high), `lognormal` (low/high = P5/P95).
+:::
+
+```{python}
+#| label: setup
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt   # use Jupyter's inline backend so Quarto captures figures
+import model as M
+P  = M.load_params()
+s, d, cen = M.run_central(P)
+_, _, mc  = M.run_mc(P, 200000)
+NAVY="#1f3864"; ACC="#c00000"; GRN="#2e7d32"; AMB="#b8860b"
+plt.rcParams.update({"font.size":9,"axes.edgecolor":"#888"})
+T = lambda x: x/1e12
+```
+
+# What this estimates
+
+A single question: **how much annual revenue could serving frontier AI models generate in 2031?** We answer it four *framings* (not statistically independent - they share the output-price and seconds drivers), each built from `parameters.csv`, then pool the two best-anchored (Anthropic model-based + Epoch) into a Monte-Carlo estimate. We pool model+Epoch rather than the macro/per-GPU framings because those run hot (per-GPU exceeds world GDP). The headline is deliberately a *range*, not a point.
+
+# Raw data & sources
+
+Every primitive, its uncertainty range, its distribution, and a live source link.
+
+```{python}
+#| label: tbl-raw
+#| output: asis
+hdr = "| Group | Parameter | Value | Range (low–high) | Dist | Unit | Source | Note |\n|---|---|--:|--:|---|---|---|---|\n"
+def g(x): return "" if x is None else f"{x:,.4g}"
+body=""
+for k,v in P.items():
+    rng = "" if v["low"] is None else f"{v['low']:,.4g}–{v['high']:,.4g}"
+    src = f"[{v['source']}]({v['url']})" if v["url"] else v["source"]
+    body += f"| {v['group']} | {v['parameter']} | {g(v['value'])} | {rng} | {v['dist']} | {v['unit']} | {src} | {v['note']} |\n"
+print(hdr + body.replace("$", "\\$"))  # escape $ so currency units aren't parsed as inline math
+```
+
+# Derived quantities
+
+```{python}
+#| label: tbl-derived
+#| output: asis
+labels={"stock_2031":"Compute stock 2031 (H100e)","gpus_2026":"GPUs per copy 2026",
+ "gpus_2031":"GPUs per copy 2031","blended_mkt":"Blended market price ($/Mtok)",
+ "industry_2026":"Industry revenue 2026 ($)","rev_per_gpu_macro":"Macro revenue/GPU ($)",
+ "rev_per_gpu_deepseek":"DeepSeek revenue/inference-GPU ($)","anthropic_rev_per_model":"Anthropic revenue/model ($)",
+ "inf_gpus_2031":"Inference GPUs 2031","copies_2031":"Concurrent copies 2031"}
+print("| Derived quantity | Central value | How |\n|---|--:|---|")
+how={"stock_2031":"stock₂₀₂₆ × growth^years",
+ "gpus_2026":f"ceil({s['ds_total_params']/1e12:g}T×bytes×overhead/{s['gpu_mem_bytes']/1e9:g}GB)",
+ "gpus_2031":f"ceil({s['model_params_2031']/1e12:g}T×bytes×overhead/{s['gpu_mem_bytes']/1e9:g}GB)","blended_mkt":"(in×ratio+out)/(ratio+1)",
+ "industry_2026":"ΣARR","rev_per_gpu_macro":"industry / stock","rev_per_gpu_deepseek":f"{s['single_stream_tps']:g} tok/s × concurrency × sec × out-price",
+ "anthropic_rev_per_model":"ARR / (inf fleet / GPUs-per-copy)","inf_gpus_2031":"stock₂₀₃₁ × inference fraction",
+ "copies_2031":"inference GPUs / GPUs-per-copy"}
+for k,lab in labels.items():
+    # escape $ so Pandoc doesn't read currency signs as inline-math ($...$) delimiters
+    print(f"| {lab} | {d[k]:,.4g} | {how[k]} |".replace("$", "\\$"))
+```
+
+# The four methods
+
+1.  **DeepSeek bottom-up (GPU = token).** Inference GPUs × revenue-per-GPU, where revenue-per-GPU = single-stream throughput (OpenRouter, 66 tok/s) × effective concurrency × seconds × output price. *This is the GPU framing and the OpenRouter token framing — they are arithmetically identical, so we show one.* Runs hot; treat as an upper bound.
+2.  **GPU macro average.** All GPUs × industry-average revenue-per-GPU (industry revenue ÷ total stock; see derived table). No inference fraction — this fleet-wide average already includes training GPUs.
+3.  **Anthropic model-based.** Concurrent copies served (inference GPUs ÷ GPUs-per-copy) × Anthropic's empirical revenue-per-model (ARR ÷ model count). *Assumes revenue-per-copy is invariant to the 8× larger 2031 model (a stationarity assumption).*
+4.  **Epoch token-capacity.** Epoch's 2031 token-capacity × inference fraction × seconds × output price. The inference fraction is applied because Epoch's figure assumes the whole fleet serves inference.
+
+# Results
+
+```{python}
+#| label: tbl-results
+#| output: asis
+print("| Method | Central $T | P5 $T | Median $T | P95 $T |\n|---|--:|--:|--:|--:|")
+for name,_ in M.METHODS:
+    p=np.percentile(mc[name],[5,50,95])/1e12
+    print(f"| {name} | {cen[name]/1e12:,.1f} | {p[0]:,.1f} | {p[1]:,.1f} | {p[2]:,.1f} |")
+pp=np.percentile(mc["Pooled (model + Epoch)"],[5,50,95])/1e12
+print(f"| **Pooled (model + Epoch)** | – | **{pp[0]:,.1f}** | **{pp[1]:,.1f}** | **{pp[2]:,.1f}** |")
+```
+
+```{python}
+#| label: fig-methods
+#| fig-cap: "2031 revenue by method. Dot = median, bar = P5–P95, log scale. DeepSeek bottom-up (red) is a non-credible upper bound."
+order=["DeepSeek bottom-up (GPU = token)","GPU macro average","Epoch token-capacity","Anthropic model-based","Pooled (model + Epoch)"]
+fig,ax=plt.subplots(figsize=(7.2,3.0))
+for i,name in enumerate(order):
+    v=mc[name]/1e12; p5,p50,p95=np.percentile(v,[5,50,95])
+    col=ACC if "DeepSeek" in name else (NAVY if "Pooled" in name else "#5b7aa8")
+    ax.plot([p5,p95],[i,i],color=col,lw=4,alpha=.5,solid_capstyle="round"); ax.plot(p50,i,"o",color=col,ms=8)
+    ax.text(p95*1.05,i,f"${p50:.0f}T",va="center",fontsize=8,color=col)
+ax.axvline(2,color="#999",ls="--",lw=1); ax.text(2,-0.6,"doc's $2T",fontsize=7,color="#999",ha="center")
+ax.set_yticks(range(len(order))); ax.set_yticklabels([n.split(" (")[0] for n in order])
+ax.set_xscale("log"); ax.set_xlabel("US$ trillions (log)"); ax.spines[["top","right"]].set_visible(False); ax.invert_yaxis()
+plt.tight_layout(); plt.show()
+```
+
+```{python}
+#| label: fig-pooled
+#| fig-cap: "Pooled 2031 revenue (Anthropic model-based + Epoch token-capacity)."
+fig,ax=plt.subplots(figsize=(7.2,3.0))
+pv=mc["Pooled (model + Epoch)"]/1e12; v=np.clip(pv,0,80)
+ax.hist(v,bins=80,color=NAVY,alpha=.85)
+p5,p50,p95=np.percentile(pv,[5,50,95]); mn=pv.mean()
+ax.axvline(p50,color=GRN,ls="--",lw=1.8,label=f"median ${p50:.0f}T")
+ax.axvline(mn,color=AMB,ls=":",lw=1.8,label=f"mean ${mn:.0f}T")
+ax.axvspan(p5,p95,color=GRN,alpha=.07,label=f"P5–P95 ${p5:.0f}–{p95:.0f}T")
+ax.set_xlabel("US$ trillions"); ax.set_ylabel("trials"); ax.legend(fontsize=8); ax.spines[["top","right"]].set_visible(False)
+plt.tight_layout(); plt.show()
+```
+
+# Scale & human comparison
+
+```{python}
+#| label: tbl-human
+#| output: asis
+# tokens/min from Epoch token capacity at central inference fraction
+eff_tps = s["epoch_token_capacity_2031"]*s["inference_fraction_2031"]
+llm_min = eff_tps*60
+human_min = s["workers_2031"]*s["human_tok_min"]
+print("| Comparison | Value |\n|---|--:|")
+print(f"| Effective inference tokens/sec (2031) | {eff_tps:,.3g} |")
+print(f"| LLM tokens/min vs human cognition tokens/min (capacity, NOT cognitive-output equivalence) | {llm_min/human_min:,.1f}× |")
+print(f"| Hours to emit one 'internet' (500T tokens) | {s['internet_tokens']/llm_min/60:,.1f} |")
+print(f"| Pooled revenue as % of global wages (${s['wages_global']/1e12:.0f}T) | {np.median(mc['Pooled (model + Epoch)'])/s['wages_global']*100:,.0f}% |")
+```
+
+# Caveats {.unnumbered}
+
+*Source of truth: `parameters.csv`. Engine: `model.py`. Regenerate with `quarto render report.qmd` or `python model.py`. Methods share the output-price and seconds drivers, so the four are framings, not statistically independent samples.*
