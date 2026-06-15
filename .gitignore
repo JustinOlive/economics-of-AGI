@@ -12,3 +12,8 @@ __pycache__/
 
 # Scratch / temp outputs
 _tmp_*
+
+# Files removed from GitHub but kept locally
+justin_learns_econ.md
+brief-draft.qmd
+game-Instructions.md
